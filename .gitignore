@@ -1,0 +1,33 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+*.log
+
+# ROS 2 generated files
+ros2_ws/build/
+ros2_ws/install/
+ros2_ws/log/
+
+# Unity generated files
+unity/Library/
+unity/Temp/
+unity/Logs/
+unity/obj/
+unity/UserSettings/
+unity/MemoryCaptures/
+unity/Build/
+unity/Built/
+*.csproj
+*.sln
+*.pidb
+*.booproj
+*.svd
+*.userprefs
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

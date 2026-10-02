@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<robot name="gesture_arm">
+  <material name="grey"><color rgba="0.35 0.35 0.4 1"/></material>
+  <material name="blue"><color rgba="0.15 0.45 0.85 1"/></material>
+  <material name="orange"><color rgba="0.95 0.5 0.1 1"/></material>
+  <material name="green"><color rgba="0.2 0.75 0.4 1"/></material>
+
+  <link name="base_link">
+    <visual><origin xyz="0 0 0.025"/><geometry><cylinder radius="0.12" length="0.05"/></geometry><material name="grey"/></visual>
+  </link>
+
+  <!-- yaw (z) -->
+  <link name="turret">
+    <visual><origin xyz="0 0 0.05"/><geometry><cylinder radius="0.07" length="0.1"/></geometry><material name="blue"/></visual>
+  </link>
+  <joint name="joint_base" type="revolute">
+    <parent link="base_link"/><child link="turret"/>
+    <origin xyz="0 0 0.05"/><axis xyz="0 0 1"/>
+    <limit lower="-1.5708" upper="1.5708" effort="10" velocity="3"/>
+  </joint>
+
+  <!-- shoulder pitch (y) -->
+  <link name="upper_arm">
+    <visual><origin xyz="0 0 0.2"/><geometry><box size="0.06 0.06 0.4"/></geometry><material name="orange"/></visual>
+  </link>
+  <joint name="joint_shoulder" type="revolute">
+    <parent link="turret"/><child link="upper_arm"/>
+    <origin xyz="0 0 0.1"/><axis xyz="0 1 0"/>
+    <limit lower="-1.2217" upper="1.2217" effort="10" velocity="3"/>
+  </joint>
+
+  <!-- elbow pitch (y) -->
+  <link name="forearm">
+    <visual><origin xyz="0 0 0.175"/><geometry><box size="0.05 0.05 0.35"/></geometry><material name="blue"/></visual>
+  </link>
+  <joint name="joint_elbow" type="revolute">
+    <parent link="upper_arm"/><child link="forearm"/>
+    <origin xyz="0 0 0.4"/><axis xyz="0 1 0"/>
+    <limit lower="0" upper="2.0944" effort="10" velocity="3"/>
+  </joint>
+
+  <!-- wrist roll (z, along forearm) -->
+  <link name="gripper_base">
+    <visual><origin xyz="0 0 0.02"/><geometry><box size="0.03 0.1 0.04"/></geometry><material name="grey"/></visual>
+  </link>
+  <joint name="joint_wrist" type="revolute">
+    <parent link="forearm"/><child link="gripper_base"/>
+    <origin xyz="0 0 0.35"/><axis xyz="0 0 1"/>
+    <limit lower="-1.5708" upper="1.5708" effort="5" velocity="4"/>
+  </joint>
+
+  <!-- gripper fingers (prismatic, 0 = closed, 0.03 m = open) -->
+  <link name="finger_left">
+    <visual><origin xyz="0 0 0.03"/><geometry><box size="0.02 0.01 0.06"/></geometry><material name="green"/></visual>
+  </link>
+  <joint name="finger_left_joint" type="prismatic">
+    <parent link="gripper_base"/><child link="finger_left"/>
+    <origin xyz="0 0.008 0.04"/><axis xyz="0 1 0"/>
+    <limit lower="0" upper="0.03" effort="5" velocity="0.2"/>
+  </joint>
+
+  <link name="finger_right">
+    <visual><origin xyz="0 0 0.03"/><geometry><box size="0.02 0.01 0.06"/></geometry><material name="green"/></visual>
+  </link>
+  <joint name="finger_right_joint" type="prismatic">
+    <parent link="gripper_base"/><child link="finger_right"/>
+    <origin xyz="0 -0.008 0.04"/><axis xyz="0 -1 0"/>
+    <limit lower="0" upper="0.03" effort="5" velocity="0.2"/>
+  </joint>
+</robot>
