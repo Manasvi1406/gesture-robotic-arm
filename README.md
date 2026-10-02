@@ -112,7 +112,7 @@ python -m pytest -q
 Expected result:
 
 ```text
-7 passed
+9 passed
 ```
 
 The test suite is deliberately independent of a webcam.
@@ -257,17 +257,36 @@ All joint targets are clamped to the corresponding robot limits.
 
 ## 11. Validation status
 
-The repository is designed so each layer can be validated independently:
+The project was tested layer by layer before the initial GitHub release:
 
-1. **Unit tests** — gesture mapping without camera
-2. **Demo transport** — synthetic UDP stream without camera
-3. **ROS 2 build** — `colcon build --symlink-install`
-4. **RViz demo** — synthetic `/joint_states`
-5. **Unity demo** — synthetic UDP motion
-6. **Live integration** — webcam → MediaPipe → mapper → ROS/Unity
+1. **Python automated tests** — 9/9 tests passed.
+2. **Windows webcam** — webcam opened successfully and delivered frames.
+3. **MediaPipe hand tracking** — hand landmarks were detected successfully.
+4. **Windows gesture application** — live hand tracking and joint values were observed.
+5. **UDP communication** — Windows gesture sender successfully transmitted JSON arm-state data to WSL.
+6. **ROS 2 Jazzy build** — clean `colcon build --symlink-install` completed successfully.
+7. **ROS 2 UDP input** — ROS 2 node successfully received the Windows UDP stream.
+8. **ROS 2 `/joint_states`** — live joint positions changed with different hand poses.
+9. **RViz visualization** — the simulated robotic arm responded to live gesture input.
 
-The live webcam test depends on the user's camera and desktop environment, so it must be performed on the target machine.
+### Validation pipeline
 
+```text
+Windows Webcam
+      ↓
+MediaPipe Hand Tracking
+      ↓
+Gesture Mapping
+      ↓
+UDP JSON
+      ↓
+WSL / ROS 2 Jazzy
+      ↓
+/joint_states
+      ↓
+Robot State Publisher
+      ↓
+RViz
 ## 12. Troubleshooting
 
 ### Pytest loads an incompatible ROS plugin
